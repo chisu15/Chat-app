@@ -1,16 +1,77 @@
 <!DOCTYPE html>
 <html lang="en">
+
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Document</title>
     <link rel="stylesheet" href="css/style.css">
 </head>
+
 <body>
     <div class="login">
-
+        <form id="login-form">
+            <h1 class="login-title">Chat app</h1>
+            <input type="text" id="username">
+            <button id="login-btn">Đăng nhập</button>
+        </form>
     </div>
-    <script src=""></script>
-    <script src="js/script.js"></script>
+    <div class="container">
+        <h1 class="login-title">Chat app</h1>
+        <div class="tool">
+
+            <div class="btns">
+                <form action="" id="create-room">
+                    <input type="text" id="roomName">
+                    <button>Create Room</button>
+                </form>
+                <form action="" id="logout-form">
+                    <button id="logout-btn">Logout</button>
+                </form>
+            </div>
+        </div>
+        <div class="main-area">
+            <div class="list">
+                <h3 class="user-list-title">You</h3>
+                <div class="you">
+                    <ul class="user-list">
+
+                    </ul>
+                </div>
+                <div class="online-list">
+                    <h3 class="user-list-title">User Online</h3>
+                    <ul class="online">
+
+                    </ul>
+                </div>
+                <div class="room-list">
+                    <h3 class="user-list-title">Room</h3>
+                    <ul class="room">
+
+                    </ul>
+                </div>
+            </div>
+            <div class="chat-area">
+                <div class="title-chat"></div>
+                <div class="msg-area">
+                    <ul class="user-chat you">
+                        <h3 class="user-name">You</h3>
+
+                    </ul>
+                    <ul class="user-chat away">
+                        <h3 class="user-name">Away</h3>
+
+                    </ul>
+                </div>
+                <form class="send-area">
+                    <input type="text" name="" id="msg">
+                    <button id="send-btn">SEND</button>
+                </form>
+            </div>
+        </div>
+    </div>
+    <script src="/socket.io/socket.io.js"></script>
+    <script src="/js/script.js"></script>
 </body>
+
 </html>

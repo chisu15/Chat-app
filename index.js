@@ -17,14 +17,12 @@ var messageHistory = [];
 app.use(express.static("public"));
 app.set('views', './view');
 const port = 3000;
-try {
-    messageHistory = fs.readJsonSync('./message.json');
-    // userList = fs.readJsonSync('./userList.json');
-} catch (error) {
-    console.error('Error while reading JSON file:', error);
-}
-
-
+// try {
+//     messageHistory = fs.readJsonSync('./message.json');
+//     // userList = fs.readJsonSync('./userList.json');
+// } catch (error) {
+//     console.error('Error while reading JSON file:', error);
+// }
 io.on('connection', (socket) => {
     socket.on('userInfo', data => {
         if (userList.indexOf(data) >= 0) {
@@ -52,6 +50,7 @@ io.on('connection', (socket) => {
                 
             }
         }
+        console.log(messageHistory);
         io.to(socket.room).emit('sendMessage', message)
     })
     socket.on('createRoom', data => {
@@ -82,7 +81,10 @@ io.on('connection', (socket) => {
             userList.indexOf(socket.username), 1
         );
         socket.broadcast.emit('users', userList);
-        fs.writeJsonSync('./message.json',messageHistory)
+        if(socket.username == data.username)
+        {
+            // fs.writeJsonSync('./message.json',messageHistory)
+        }
     })
 
 });

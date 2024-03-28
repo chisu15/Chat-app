@@ -1,0 +1,214 @@
+*{
+    font-family: "Roboto";
+    background-color: rgb(44, 53, 173);
+    color: aliceblue;
+}
+body{
+    display: flex;
+    flex-direction: column;
+    overflow-x: hidden;
+}
+#login-title
+{
+    text-align: center;
+}
+.login
+{
+    display: block;
+}
+#login-form{
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+    gap: 10px;
+}
+#username{
+    width: 40%;
+    border-radius: 6px;
+    border: #000000 solid 1px;
+}
+.container .login-title{
+    text-align: center;
+}
+.container{
+    display: none;
+    width: 100%;
+    flex-direction: column;
+    width: 100%;
+    gap: 20px;
+
+}
+.tool
+{
+    display: flex;
+    justify-content: space-between;
+}
+.btns{
+    display: flex;
+    gap: 10px;
+    margin-left: auto;
+}
+button
+{
+    width: fit-content;
+    padding: 10px;
+    border-radius: 10px;
+    border: #9a9a9a solid 1px;
+    background-color: rgb(102, 88, 232);
+}
+input
+{
+    width: 200px;
+    height: 30px;
+    border-radius: 12px;
+    border: #9a9a9a solid 1px;
+    outline: none;
+    background-color: aliceblue;
+    outline: none;
+    padding-inline: 10px;
+    color: #000000;
+}
+.main-area{
+
+    display: flex;
+    justify-content: space-between;
+}
+.list{
+    width: 25vw;
+    background-color: rgb(102, 88, 232);
+    padding: 10px;
+    border-radius: 12px;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+}
+.you, .online, .room
+{
+    background-color: rgb(102, 88, 232);
+
+}
+.user-list-title
+{
+    text-align: center;
+    background-color: rgb(102, 88, 232);
+    border-bottom: aliceblue solid 1px;
+}
+.user-list li{
+    list-style: none;
+    margin-left: -50px;
+    background-color: rgb(102, 88, 232);
+}
+
+.chat-area
+{   
+    width: 65vw;
+    border-radius: 12px;;
+    display: flex;
+    flex-direction: column;
+    border: #9a9a9a solid 1px;
+    background-color: aliceblue;
+    padding-top: 20px;
+    padding-bottom: 20px;
+    padding-inline: 10px;
+}
+.title-chat
+{
+    text-align: center;
+    border-bottom:#9a9a9a solid 1px ;
+    padding-top: 10px;
+    background-color: aliceblue;
+    color: #000000;
+    font-size: large;
+    padding-bottom: 10px;
+}
+.msg-area{
+    display: flex;
+    flex-direction: column;
+    height: 600px;
+    overflow-y: auto;
+    background-color: aliceblue;
+    /*  */
+    /* width: 100%; */
+    /* border-radius: 12px; */
+}
+.user-chat
+{
+    background-color: #9a9a9a;
+    list-style: none;
+    /* width: 300px; */
+    border-radius: 12px;
+    width: 300px;
+    word-break: break-all;
+    padding: 20px;
+
+}
+.user-chat.you{
+    margin-left: auto;
+    background-color: cornflowerblue;
+}
+.user-chat.away{
+    margin-right: auto;
+}
+.user-name
+{
+    background-color: #9a9a9a;
+}
+.user-chat.you .message
+{
+    background-color: cornflowerblue;
+}
+.user-chat.you .user-name{
+    background-color: cornflowerblue;
+}
+.user-chat.away .message{
+    background-color: #9a9a9a;
+}
+.message
+{
+    height: auto;
+    width: 100%;
+    /* background-color: #9a9a9a; */
+}
+.send-area
+{
+    border-top: #9a9a9a solid 1px;
+    background-color: aliceblue;
+    padding: 20px;
+    display: flex;
+    justify-content: space-between;
+    gap: 5px;
+}
+#msg
+{
+    background-color: aliceblue;
+    width:100%;
+    padding-inline: 20px;
+}
+.room-list, .online, .room, .online-list, .user{
+    background-color: rgb(102, 88, 232);
+}
+.user 
+{
+    list-style: none;
+    /* margin-left: -50px; */
+    background-color: rgb(102, 88, 232);
+    padding: 10px;
+    padding-inline: 30px;
+    border-radius: 12px;
+    word-break: break-all;
+}
+.user.active
+{
+    background-color: rgb(137, 110, 212);
+    padding: 10px;
+    padding-inline: 30px;
+    border-radius: 12px;
+    box-shadow: #000000 1px 1px 1px 1px;
+}
+.online, .room
+{
+    display: flex;
+    flex-direction: column;
+    gap: 20px;
+}

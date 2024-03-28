@@ -6,7 +6,8 @@ const login = document.querySelector('.login');
 const loginForm = document.querySelector('#login-form');
 const logoutForm = document.querySelector('#logout-form');
 const createRoomForm = document.querySelector("#create-room")
-const chatUsers = document.querySelector('.user-list')
+const chatUsers = document.querySelector('.list')
+const chatForm = document.querySelector('.send-area');
 
 let roomName
 chatUsers.addEventListener('click', (e)=>{
@@ -26,7 +27,8 @@ socket.on('moveToChat', data=>{
 })
 loginForm.addEventListener('submit', function (e) {
     e.preventDefault();
-    const inputValue = document.getElementById('username').value;
+    const inputValue = e.target.username.value;
+    console.log(inputValue);
     username = inputValue;
     socket.emit('userInfo', inputValue)
 });
@@ -35,10 +37,9 @@ logoutForm.addEventListener('submit', function (e) {
     e.preventDefault();
     socket.emit('logout');
     container.style.display = 'none'
-    login.style.display = 'flex'
+    login.style.display = 'block'
 })
 
-const chatForm = document.querySelector('.send-area');
 chatForm.addEventListener('submit', (e) => {
     e.preventDefault();
     const msg = e.target.elements.msg.value;
@@ -112,17 +113,17 @@ function outputMessage(message) {
     } else {
         messageEle =
             `<ul class="user-chat you">
+            <h3 class="user-name">${message.username}</h3>
         <li class="message">
         ${message.msg}
         </li>
-        <h3 class="user-name">${message.username}</h3>
     </ul>`
     }
     chatArea.innerHTML += messageEle;
 }
 
 function addYou(user) {
-    var you = document.querySelector('.you-online')
+    var you = document.querySelector('.you')
     you.innerHTML = `👩🏻‍💻 ${user} `
 }
 var userList = document.querySelector('.user-list');
