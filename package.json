@@ -1,16 +1,18 @@
 {
   "dependencies": {
+    "child_process": "^1.0.2",
     "express": "^4.19.2",
     "fs-extra": "^11.2.0",
     "http": "^0.0.1-security",
+    "json-server": "^1.0.0-alpha.23",
     "mongoose": "^8.2.3",
     "nodemon": "^3.1.0",
-    "socket.io": "^4.7.5"
+    "socket.io": "^4.7.5",
+    "util": "^0.12.5"
   },
   "name": "socket",
   "version": "1.0.0",
   "main": "index.js",
-  "devDependencies": {},
   "scripts": {
     "test": "echo \"Error: no test specified\" && exit 1",
     "start": "nodemon --inspect ./index.js"

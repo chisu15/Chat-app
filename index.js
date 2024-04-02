@@ -7,71 +7,104 @@ const {
     disconnect
 } = require('process');
 const socketio = require('socket.io');
-const fs = require('fs-extra');
+const mongoose = require('mongoose');
+
+mongoose.connect('mongodb://localhost:27017/chatApp')
+    .then(() => console.log('Connected to MongoDB'))
+    .catch(err => console.error('Error connecting to MongoDB:', err));
+
+const messageSchema = new mongoose.Schema({
+    room: String,
+    username: String,
+    message: String,
+    timestamp: { type: Date, default: Date.now }
+});
+const roomSchema = new mongoose.Schema({
+    room: String
+});
+const Rooms = mongoose.model('rooms', roomSchema);
+const Messages = mongoose.model('messages', messageSchema);
+
 
 const app = express();
 const server = http.createServer(app);
 const io = socketio(server);
+
 var userList = [];
-var messageHistory = [];
+
+
 app.use(express.static("public"));
 app.set('views', './view');
 const port = 3000;
-// try {
-//     messageHistory = fs.readJsonSync('./message.json');
-//     // userList = fs.readJsonSync('./userList.json');
-// } catch (error) {
-//     console.error('Error while reading JSON file:', error);
-// }
-io.on('connection', (socket) => {
-    socket.on('userInfo', data => {
+
+
+io.on('connection', async (socket) => {
+    socket.on('userInfo', async data => {
         if (userList.indexOf(data) >= 0) {
             socket.emit('loginFail');
         } else {
             console.log("Socket userInfo", data);
             userList.push(data);
+            const roomCreated = await Rooms.find();
+            var infoData = {
+                users: userList,
+                roomList: roomCreated
+            }
             socket.username = data;
             socket.emit("loginSuccess", data)
-            io.emit('users', userList)
+            io.emit('users', infoData)
         }
     })
-    socket.on('chatMessage', data => {
-
+    socket.on('chatMessage', async data => {
+        console.log(data.msg);
         var message = {
             room: socket.room,
             username: socket.username,
-            msg: data.msg
+            message: data.msg
         }
         if (socket.username && socket.room) {
-            console.log("LLLLLLLLLLLLLLLLLLLLLLLLLLLLLLLLL",message)
-            messageHistory.push(message);
-            if(socket.username == data.username)
-            {
-                
+            if (socket.username == data.username) {
+                const newMessage = new Messages(message);
+                await newMessage.save();
             }
         }
-        console.log(messageHistory);
         io.to(socket.room).emit('sendMessage', message)
     })
-    socket.on('createRoom', data => {
-        socket.join(data);
-        socket.room = data;
-        console.log(socket.adapter.rooms);
-        var roomList = [];
-        for (room of socket.adapter.rooms) {
-            roomList.push(room[0])
-        }
-        console.log('Socket createRoom', data);
-        console.log(roomList);
-        io.emit('listRoom', roomList);
+    socket.on('createRoom', async data => {
+        const newRoom = new Rooms({room: data});
+        await newRoom.save();
+        console.log('Socket createRoom: ', data);
+        const roomCreated = await Rooms.find(); 
+        io.emit('listRoom', roomCreated);
     })
-
-    socket.on('clickToChat', data => {
+    socket.on('clickToChatUser', async data =>{
+        var nameArr = [data.a, data.b].sort();
+        var roomId = nameArr[0]+nameArr[1];
+        console.log(roomId);
+        socket.join(roomId);
+        socket.room = roomId;
+        const messagesInRoom = await Messages.find({ room: roomId });
+        console.log(messagesInRoom);
+        var oldMessages = {
+            roomName: data.b,
+            // type: user,
+            messages: messagesInRoom
+        }
+        socket.emit('moveToChat', oldMessages);
+    })
+    socket.on('clickToChatRoom', async data => {
         // socket.leave(socket.room);
         console.log("Socket clickToChat", data, socket.room);
         socket.join(data);
         socket.room = data;
-        socket.emit('moveToChat', data);
+        const messagesInRoom = await Messages.find({ room: data });
+        console.log(messagesInRoom);
+        var oldMessages = {
+            roomName: data,
+            // type: room,
+            messages: messagesInRoom
+        }
+        socket.emit('moveToChat', oldMessages);
         // io.to(data).emit('sendMessage', messageHistory)
 
     });
@@ -81,12 +114,9 @@ io.on('connection', (socket) => {
             userList.indexOf(socket.username), 1
         );
         socket.broadcast.emit('users', userList);
-        if(socket.username == data.username)
-        {
-            // fs.writeJsonSync('./message.json',messageHistory)
-        }
-    })
 
+    })
+    
 });
 
 app.get('/', (req, res) => {

@@ -19,11 +19,21 @@ chatUsers.addEventListener('click', (e)=>{
         e.target.classList.add('active')
         var name = e.target.textContent;
         console.log(name);
-        socket.emit('clickToChat', name);
+        if(e.target && e.target.classList.contains('u'))
+        {
+            socket.emit('clickToChatUser', {a: yourName, b: name});
+        }
+        else{
+            socket.emit('clickToChatRoom', name);
+        }
     }
 })
 socket.on('moveToChat', data=>{
-    createChatBox(data);
+    createChatBox(data.roomName);
+    data.messages.forEach(msg =>{
+        outputMessage(msg);
+        scrollToBottom();
+    })
 })
 loginForm.addEventListener('submit', function (e) {
     e.preventDefault();
@@ -74,11 +84,12 @@ socket.on("loginSuccess", data => {
     container.style.display = 'flex'
     login.style.display = 'none'
 })
-socket.on('users', (users) => {
+socket.on('users', (data) => {
     console.log(socket.username);
     console.log(userList);
     console.log(1);
-    renderUserList(users)
+    renderUserList(data.users)
+    renderRoomList(data.roomList)
 })
 socket.on('listRoom',roomList=>{
     console.log(roomList);
@@ -107,7 +118,7 @@ function outputMessage(message) {
             `<ul class="user-chat away">
         <h3 class="user-name">${message.username}</h3>
         <li class="message">
-        ${message.msg}
+        ${message.message}
         </li>
     </ul>`
     } else {
@@ -115,7 +126,7 @@ function outputMessage(message) {
             `<ul class="user-chat you">
             <h3 class="user-name">${message.username}</h3>
         <li class="message">
-        ${message.msg}
+        ${message.message}
         </li>
     </ul>`
     }
@@ -135,7 +146,7 @@ function renderUserList(userList) {
     userListElement.innerHTML = ""
 
     userList.forEach(user => {
-        var userOnline = `<li class="user">${user}</li>`;
+        var userOnline = `<li class="user u">${user}</li>`;
         userListElement.innerHTML += userOnline;
     });
 }
@@ -143,8 +154,8 @@ function renderRoomList(roomList) {
     let roomListElement = document.querySelector('.room');
     roomListElement.innerHTML = ""
 
-    roomList.forEach(room => {
-        var roomOnline = `<li class="user">${room}</li>`;
+    roomList.forEach(data => {
+        var roomOnline = `<li class="user">${data.room}</li>`;
         roomListElement.innerHTML += roomOnline;
     });
 }
